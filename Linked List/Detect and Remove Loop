@@ -1,0 +1,67 @@
+Problem:
+
+https://www.codingninjas.com/studio/problems/interview-shuriken-42-detect-and-remove-loop_241049?leftPanelTab=0
+
+
+Solution:
+
+// Function to check loop is present or not
+Node* floydDetectLoop(Node* head){
+        if(head==NULL){
+            return NULL;
+        }
+        
+        Node* slow = head;
+        Node* fast = head;
+        
+        while(slow!=NULL && fast!=NULL){
+            fast = fast->next;
+            if(fast!=NULL){
+            fast = fast->next;
+            }
+         slow = slow->next;
+        
+         if(slow == fast){
+            return slow;
+         }
+        }
+        return NULL;
+    }
+    
+ //Function to find starting node
+  Node* getStartingNode(Node* head){
+        if(head == NULL)
+            return NULL;
+            
+            Node* intersection = floydDetectLoop(head);
+            if(intersection == NULL){
+                return NULL;
+            }
+            Node* slow = head;
+            
+            while(slow!=intersection){
+                slow = slow->next;
+                intersection = intersection->next;
+            }
+            return slow;     
+    }
+    
+//Function to remove a loop in the linked list.
+Node *removeLoop(Node *head)
+{
+       if(head==NULL){
+           return NULL;
+       }
+       
+       Node* StartOfLoop = getStartingNode(head);
+       if(StartOfLoop == NULL){
+           return head;
+       }
+       Node* temp = StartOfLoop;
+       
+       while(temp->next != StartOfLoop){
+           temp = temp->next;
+       }
+       temp->next = NULL;
+       return head;
+}
