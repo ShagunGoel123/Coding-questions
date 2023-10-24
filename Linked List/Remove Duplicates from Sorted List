@@ -1,0 +1,43 @@
+Problem:
+
+Given the head of a sorted linked list, delete all duplicates such that each element appears only once. 
+Return the linked list sorted as well.
+
+Example 1:
+Input: head = [1,1,2]
+Output: [1,2]
+
+Example 2:
+Input: head = [1,1,2,3,3]
+Output: [1,2,3]
+
+
+
+Solution:
+
+class Solution {
+public:
+    ListNode* deleteDuplicates(ListNode* head) {
+        //Empty List
+        if(head == NULL){
+            return NULL;
+        }
+
+        // Non Empty List
+        ListNode* curr = head;
+        while(curr!=NULL)
+        { 
+            if((curr->next != NULL) && curr->val == curr->next->val)
+            { 
+                ListNode* NodeToDelete = curr->next;
+                ListNode* next_next = curr->next->next;
+                delete(NodeToDelete);
+                curr->next = next_next;
+            }
+            else{
+                curr = curr->next;
+            }
+        }
+        return head;  
+    }
+};
