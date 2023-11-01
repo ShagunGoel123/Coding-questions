@@ -20,7 +20,6 @@ Solution:
 class Solution {
 public:
     vector<int> sortArrayByParity(vector<int>& nums) {
-        vector<int>v;
         int j=0;
         for(int i=0;i<nums.size();i++)
         {
