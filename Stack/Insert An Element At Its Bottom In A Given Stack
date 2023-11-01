@@ -1,0 +1,32 @@
+Problem:
+
+https://www.codingninjas.com/studio/problems/insert-an-element-at-its-bottom-in-a-given-stack_1171166?leftPanelTabValue=PROBLEM
+
+
+Solution:
+
+#include <bits/stdc++.h> 
+void solve(stack<int>& s, int x){
+    //Base case
+    if(s.empty()){
+        s.push(x);
+        return;
+    }
+
+    int num = s.top();
+    s.pop(); 
+    //top element ko pop krenge fir check krenge agr stack empty h toh x ko push krenge
+
+    //recursive call
+    solve(s,x);
+
+    //jo top element pop kraye they unhe push krayenge
+    s.push(num);
+}
+
+stack<int> pushAtBottom(stack<int>& myStack, int x) 
+{
+    solve(myStack,x);
+    return myStack;
+}
+
