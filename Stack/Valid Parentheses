@@ -24,6 +24,9 @@ Output: false
 
 Solution:
 
+//Time complexity = O(n)
+//Space complexity = O(n)  where n is length of string
+
 class Solution {
 public:
     bool isValid(string s) {
