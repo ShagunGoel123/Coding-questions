@@ -1,0 +1,45 @@
+Problem:
+
+https://www.codingninjas.com/studio/problems/redundant-brackets_975473?leftPanelTabValue=PROBLEM
+
+
+Solution:
+
+#include <bits/stdc++.h> 
+bool findRedundantBrackets(string &s)
+{
+    //create a stack
+    stack<char>st;
+    for(int i=0;i<s.length();i++){
+        char ch = s[i];
+
+        //if char is '(' or operators then push into the stack
+        if(ch == '(' || ch == '+' || ch == '-' || ch == '*' || ch == '/'){
+            st.push(ch);
+        }
+        else{
+            //ch ya toh ')' or lowercase letter
+
+            if(ch == ')'){
+                bool isRedundant = true;
+                while(st.top() != '('){
+                    char top = st.top();
+
+                    //if any operator is present then not rebundant bracket
+                    if(top == '+' || top == '-' || top == '*' || top == '/'){
+                        isRedundant = false;
+                    }
+                    //operator ko pop krayenge
+                    st.pop();
+                }
+                //operator is not present
+                if(isRedundant == true){
+                    return true;
+                }
+                //pop the bracket
+                st.pop();
+            }
+        }
+    }
+    return false;
+}
