@@ -1,0 +1,55 @@
+Problem:
+
+https://www.codingninjas.com/studio/problems/next-smaller-element_1112581?leftPanelTabValue=PROBLEM
+
+
+Solution:
+
+//Approach 1:
+//By using stack
+
+#include<stack>
+vector<int> nextSmallerElement(vector<int> &arr, int n)
+{
+    stack<int>s;
+    s.push(-1);
+    vector<int>ans(n);
+
+    for(int i=n-1;i>=0;i--){
+        int curr = arr[i];
+        while(s.top()>=curr){
+            s.pop();
+        }
+        //ans is stack ka top
+        ans[i] = s.top();
+        s.push(curr);
+    }
+    return ans;
+}
+
+
+//Approach 2:
+//By using array
+//Time complexity = O(n^2)
+//Space complexity = O(n)
+
+vector<int> nextSmallerElement(vector<int> &arr, int n)
+{
+    vector<int>ans;
+    for(int i=0; i<n; i++){
+       for(int j=i+1; j<n; j++){
+           if(arr[i]>arr[j]){
+               ans.push_back(arr[j]);
+               break;
+           }
+           if(j==(n-1)){
+               ans.push_back(-1);
+           }
+       }
+        if(i==(n-1)){
+            ans.push_back(-1);
+        } 
+    }
+    return ans;
+}
+
