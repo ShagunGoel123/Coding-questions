@@ -1,0 +1,44 @@
+Problem:
+
+You are given an array of strings words and a string chars.
+A string is good if it can be formed by characters from chars (each character can only be used once).
+Return the sum of lengths of all good strings in words.
+
+Example 1:
+Input: words = ["cat","bt","hat","tree"], chars = "atach"
+Output: 6
+Explanation: The strings that can be formed are "cat" and "hat" so the answer is 3 + 3 = 6.
+
+Example 2:
+Input: words = ["hello","world","leetcode"], chars = "welldonehoneyr"
+Output: 10
+Explanation: The strings that can be formed are "hello" and "world" so the answer is 5 + 5 = 10.
+
+
+
+Solution:
+
+class Solution {
+public:
+    int countCharacters(vector<string>& words, string chars) {
+        int ans = 0;
+        map<char,int>s;
+        for(int i=0;i<chars.length();i++){
+            s[chars[i]]++;
+        }
+        for(int i=0;i<words.size();i++){
+            int count = 0;
+            map<char,int>mp = s;
+            for(int j=0;j<words[i].length();j++){
+                if((mp.find(words[i][j]) != mp.end()) && mp[words[i][j]] != 0){
+                    mp[words[i][j]]--;
+                    count++;
+                }
+            }
+            if(count == words[i].length()){
+                ans = ans+count;
+            }
+        }
+        return ans;
+    }
+};
