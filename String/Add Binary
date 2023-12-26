@@ -1,0 +1,51 @@
+Problem:
+
+Given two binary strings a and b, return their sum as a binary string.
+
+Example 1:
+Input: a = "11", b = "1"
+Output: "100"
+
+Example 2:
+Input: a = "1010", b = "1011"
+Output: "10101"
+
+
+Solution:
+
+class Solution {
+public:
+    string addBinary(string a, string b) {
+        int x=0,y=0,carry=0;
+        string ans = "";
+        while(!a.empty() || !b.empty()){
+            if(!a.empty()){
+                x = a[a.size()-1]-'0';
+                a.pop_back();
+            }
+            if(!b.empty()){
+                y = b[b.size()-1]-'0';
+                b.pop_back();
+            }
+            if(x+y+carry == 2){
+                carry = 1;
+                ans = "0" + ans;
+            }
+            else if(x+y+carry == 3){
+                carry = 1;
+                ans = "1" + ans;
+            }
+            else{
+                //to_string  is used to convert an integer to string
+                ans = to_string(x+y+carry)+ans;
+                carry = 0;
+            }
+            x = 0;
+            y = 0;
+        }
+        if(carry == 1){
+            ans = "1"+ans;
+        }
+        return ans;
+    }
+};
