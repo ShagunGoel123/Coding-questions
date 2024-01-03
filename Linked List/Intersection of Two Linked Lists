@@ -1,0 +1,42 @@
+Problem:
+
+https://leetcode.com/problems/intersection-of-two-linked-lists/description/
+
+
+Solution:
+
+//Time complexity: O(n+m)
+//Space complexity: O(1)
+
+class Solution {
+public:
+    ListNode *getIntersectionNode(ListNode *headA, ListNode *headB) {
+        ListNode* tail = headA;
+        while(tail->next){
+            tail = tail->next;
+        }
+        //creating a loop
+        tail->next = headB;
+
+        //detecting the intersection
+        ListNode *fast = headA;
+        ListNode *slow = headA;
+        while(fast && fast->next){
+            slow = slow->next;
+            fast = fast->next->next;
+
+            if(slow == fast){
+                slow = headA;
+                while(slow!=fast){
+                    slow = slow->next;
+                    fast = fast->next;
+                }
+                //undoing the loop
+                tail->next = NULL;
+                return slow;
+            }
+        }
+        tail->next = NULL;
+        return NULL; 
+    }
+};
