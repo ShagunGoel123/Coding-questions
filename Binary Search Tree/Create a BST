@@ -1,0 +1,88 @@
+Problem:
+Create a Binary Search Tree.
+
+Solution:
+
+#include<iostream>
+using namespace std;
+#include<queue>
+
+class Node{
+public:
+    int data;
+    Node* left;
+    Node* right;
+
+    Node(int d){
+        this->data = d;
+        this->left = NULL;
+        this->right = NULL;
+    }
+};
+
+void levelOrderTraversal(Node* root){
+    if(root == NULL){
+        cout<<"empty"<<endl;
+        return;
+    }
+    queue<Node*>q;
+    q.push(root);
+    q.push(NULL);
+
+    while(!q.empty()){
+        Node* temp = q.front();
+        q.pop();
+
+        if(temp == NULL){
+            cout<<endl;
+            if(!q.empty()){
+                q.push(NULL);
+            }
+        }
+        else{
+            cout<<temp->data<<" ";
+            if(temp->left){
+                q.push(temp->left);
+            }
+            if(temp->right){
+                q.push(temp->right);
+            }
+        }
+    }
+
+}
+
+Node* insertIntoBST(Node* root, int d){
+   //Base case
+    if(root == NULL){
+        root = new Node(d);
+        return root;
+    }
+
+    if(d> root->data){
+        root->right = insertIntoBST(root->right,d);
+    }
+    else{
+        root->left = insertIntoBST(root->left,d);
+    }
+    return root;
+}
+void takeinput(Node* &root){
+    int data;
+    cin>>data;
+    while(data!=-1){
+        root = insertIntoBST(root,data);
+        cin>>data;
+    }
+}
+
+int main(){
+    Node* root =NULL;
+    cout<<"Enter data for BST"<<endl;
+    takeinput(root);
+    cout<<"Printing the data"<<endl;
+    levelOrderTraversal(root);
+
+    return 0;
+}
+
