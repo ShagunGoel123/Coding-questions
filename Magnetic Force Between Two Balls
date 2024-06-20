@@ -1,0 +1,42 @@
+Problem:
+
+https://leetcode.com/problems/magnetic-force-between-two-balls/description/?envType=daily-question&envId=2024-06-20
+
+Solution:
+
+class Solution {
+public:
+
+    bool canPlaceBalls(int gap, vector<int> &position, int m){
+        int lastPosition = position[0]; //Position of the last placed ball
+        int ballsRemaining = m-1;
+        for(int i=1;i<position.size() && ballsRemaining>0;i++){
+            if(position[i]-lastPosition >= gap){
+                ballsRemaining--;
+                lastPosition = position[i];
+            }
+        }
+        return ballsRemaining == 0;
+    }
+    
+    int maxDistance(vector<int>& position, int m) {
+        sort(position.begin(), position.end());
+        int n = position.size();
+        int left = 1;
+        int right = position[n-1] - position[0];
+        int maxMinDistance = -1;
+
+        //Perform binary search
+        while(left <= right){
+            int mid = (left + right)/2;
+            if(canPlaceBalls(mid, position, m)){
+                maxMinDistance = mid;
+                left = mid + 1;
+            }
+            else{
+                right = mid - 1;
+            }
+        }
+        return maxMinDistance;
+    }
+};
