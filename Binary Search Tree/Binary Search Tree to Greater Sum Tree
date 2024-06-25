@@ -1,0 +1,26 @@
+Problem:
+
+https://leetcode.com/problems/binary-search-tree-to-greater-sum-tree/description/?envType=daily-question&envId=2024-06-25
+
+
+Solution:
+
+//Time Complexity: O(n)
+//Space Complexity: O(n)
+
+class Solution {  
+public:
+    void traverse(TreeNode* root,int &sum) {
+        if (root) {
+            traverse(root->right,sum);  // Traverse the right subtree
+            sum += root->val;  // Update the sum
+            root->val = sum;  // Update the current node's value
+            traverse(root->left,sum);  // Traverse the left subtree
+        }
+    }
+    TreeNode* bstToGst(TreeNode* root) {
+        int sum = 0;
+        traverse(root,sum);
+        return root;
+    }
+};
