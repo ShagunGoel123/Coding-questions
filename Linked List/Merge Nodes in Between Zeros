@@ -1,0 +1,32 @@
+Problem:
+
+https://leetcode.com/problems/merge-nodes-in-between-zeros/?envType=daily-question&envId=2024-07-04
+
+
+Solution:
+
+//Time Complexity: O(n) - we traverse the list once
+//Space Complexity: O(1) - only extra pointer is used 
+
+class Solution {
+public:
+    ListNode* mergeNodes(ListNode* head) {
+        ListNode* curr = head->next;
+
+        while (curr) {
+            // If next node is not 0
+            if (curr->next->val != 0) {
+                // Add next.val to curr.val
+                curr->val += curr->next->val;
+                // Delete next node
+                curr->next = curr->next->next;
+            } else {
+                // Delete next node, i.e 0
+                curr->next = curr->next->next;
+                // Change curr ptr to 0's next node
+                curr = curr->next;
+            }
+        }
+        return head->next;
+    }
+};
