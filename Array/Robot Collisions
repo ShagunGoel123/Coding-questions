@@ -1,0 +1,68 @@
+Problem:
+
+https://leetcode.com/problems/robot-collisions/description/?envType=daily-question&envId=2024-07-13
+
+
+Solutions:
+
+//Time Complexity: O(nlogn)
+//Space Complexity: O(n)
+
+class Solution {
+public:
+    vector<int> survivedRobotsHealths(vector<int>& positions, vector<int>& healths, string directions) {
+        int n = positions.size();
+        // Create a vector to hold information about each robot
+        vector<vector<int>> robots;
+
+        for(int i=0;i<n;i++){
+            robots.push_back({positions[i], healths[i], directions[i], i});
+        }
+
+        sort(robots.begin(), robots.end());
+        vector<vector<int>> stack;  // Stack to process robot movements and collisions
+
+        for(auto& robot : robots){
+            if(robot[2] == 'R' || stack.empty() || stack.back()[2] == 'L'){
+                stack.push_back(robot);
+                continue;
+            }
+
+            if(robot[2] == 'L'){
+                // Flag to check if the current robot should be added to the stack
+                bool add = true; 
+                while(!stack.empty() && stack.back()[2] == 'R' && add){
+                    int last_health = stack.back()[1];
+                    if(robot[1] > last_health){
+                        stack.pop_back();
+                        robot[1] -= 1;
+                    }
+                    else if(robot[1] < last_health){
+                        stack.back()[1] -= 1;
+                        add = false; // Current robot is not added to the stack
+                    }
+                    else{
+                        stack.pop_back();
+                        add = false; // Current robot is not added to the stack
+                    }
+                }
+
+                 // If the current robot survives, add it to the stack
+                if(add){
+                    stack.push_back(robot);
+                }
+            }
+        }
+
+        vector<int> result;
+        sort(stack.begin(), stack.end(), [](vector<int>& a, vector<int>& b){
+            return a[3]<b[3];
+        });
+
+         // Extract the health of each surviving robot in the original order
+        for(auto& robot:stack){
+            result.push_back(robot[1]);
+        }
+        return result;
+    }
+};
