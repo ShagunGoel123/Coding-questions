@@ -1,0 +1,72 @@
+Problem:
+
+https://leetcode.com/problems/create-binary-tree-from-descriptions/?envType=daily-question&envId=2024-07-15
+
+
+Solution:
+
+//Time Complexity: O(n)
+//Space Complexity:o(n)
+
+class Solution {
+public:
+    TreeNode* createBinaryTree(vector<vector<int>>& descriptions) {
+        unordered_set<int> childrenSet;
+        unordered_map<int, pair<int, int>> childrenHashmap;
+
+        for (auto& desc : descriptions) {
+            int parent = desc[0];
+            int child = desc[1];
+            bool isLeft = desc[2] == 1;
+
+             // Initialize the parent's children as (-1, -1) if not already present in the map
+            if (childrenHashmap.find(parent) == childrenHashmap.end()) {
+                childrenHashmap[parent] = { -1, -1 };
+            }
+
+            childrenSet.insert(child);
+             // Update the parent's left or right child based on isLeft flag
+            if (isLeft) {
+                childrenHashmap[parent].first = child;
+            } else {
+                childrenHashmap[parent].second = child;
+            }
+        }
+
+        int headNodeVal;
+        for (auto& [parent, children] : childrenHashmap) {
+            if (childrenSet.find(parent) == childrenSet.end()) {
+                headNodeVal = parent;
+                break;
+            }
+        }
+
+         // Construct and return the binary tree starting from the root node
+        return constructTree(headNodeVal, childrenHashmap);
+    }
+
+private:
+    // Recursive function to construct the tree
+    TreeNode* constructTree(int curNodeVal, unordered_map<int, pair<int, int>>& childrenHashmap) {
+        TreeNode* newNode = new TreeNode(curNodeVal);
+        // Check if the current node has any children
+        if (childrenHashmap.find(curNodeVal) != childrenHashmap.end()) {
+            auto& children = childrenHashmap[curNodeVal];
+            // Recursively construct the left subtree if left child exists
+            if (children.first != -1) {
+                newNode->left = constructTree(children.first, childrenHashmap);
+            }
+            // Recursively construct the right subtree if right child exists
+            if (children.second != -1) {
+                newNode->right = constructTree(children.second, childrenHashmap);
+            }
+        }
+        return newNode;
+    }
+};
+
+
+
+           
+               
+      
