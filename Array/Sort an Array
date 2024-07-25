@@ -1,0 +1,84 @@
+Problem:
+
+Given an array of integers nums, sort the array in ascending order and return it.
+You must solve the problem without using any built-in functions in O(nlog(n))
+time complexity and with the smallest space complexity possible.
+
+Example 1:
+Input: nums = [5,2,3,1]
+Output: [1,2,3,5]
+Explanation: After sorting the array, the positions of some numbers are not changed
+(for example, 2 and 3), while the positions of other numbers are changed (for example, 1 and 5).
+
+Example 2:
+Input: nums = [5,1,1,2,0,0]
+Output: [0,0,1,1,2,5]
+Explanation: Note that the values of nums are not necessairly unique.
+
+
+
+Solution:
+
+//Time Complexity: O(nlogn)
+//Space Complexity: O(n)
+
+void merge(vector<int>& array, int start, int mid, int end){
+    // Size of the left subarray
+    int n1 = mid-start+1;
+    // Size of the right subarray
+    int n2 = end-mid;
+
+    // Temporary vectors to hold the left and right subarrays
+    vector<int> left_part(n1), right_part(n2);
+
+    // Copy data to temporary vectors left_part and right_part
+    for(int i=0;i<n1;i++){
+        left_part[i] = array[start+i];
+    }
+    for(int i=0;i<n2;i++){
+        right_part[i] = array[mid+1+i];
+    }
+
+    // Initial indices of the left, right and merged subarrays
+    int i=0, j=0, k=start;
+     // Merge the temporary arrays back into the original array
+    while(i<n1 && j<n2){
+        if(left_part[i] <= right_part[j]){
+            array[k++] = left_part[i++];
+        }
+        else{
+            array[k++] = right_part[j++];
+        }
+    }
+    // Copy the remaining elements of left_part, if any
+    while(i<n1){
+        array[k++] = left_part[i++];
+    }
+     // Copy the remaining elements of right_part, if any
+    while(j<n2){
+        array[k++] = right_part[j++];
+    }
+}
+void merge_sort(vector<int> &array, int start, int end){
+    // Base case: if the array has one or zero elements, it's already sorted
+    if(start >= end){
+        return;
+    }
+    int mid = start + (end-start)/2;
+
+    // Call merge_sort recursively to sort the first half
+    merge_sort(array, start, mid);
+
+    // Call merge_sort recursively to sort the second half
+    merge_sort(array, mid+1, end);
+
+    // Merge the two halves sorted in previous steps
+    merge(array, start, mid, end);
+}
+class Solution {
+public:
+    vector<int> sortArray(vector<int>& nums) {
+        merge_sort(nums, 0, nums.size()-1);
+        return nums;
+    }
+};
