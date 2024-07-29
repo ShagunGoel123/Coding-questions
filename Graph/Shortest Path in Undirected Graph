@@ -1,0 +1,63 @@
+Problem:
+
+https://www.naukri.com/code360/problems/shortest-path-in-an-unweighted-graph_981297?leftPanelTabValue=PROBLEM
+
+
+Solution:
+
+//Time Complexity: O(n+m)
+//Space Complexity: O(n+m)
+
+#include<unordered_map>
+#include<queue>
+#include<list>
+vector<int> shortestPath( vector<pair<int,int>> edges , int n , int m, int s , int t){
+	
+	//create adjacency list
+	unordered_map<int, list<int>> adj;
+	for(int i=0;i<edges.size();i++){
+		int u = edges[i].first;
+		int v = edges[i].second;
+
+		adj[u].push_back(v);
+		adj[v].push_back(u);
+	}
+
+    //Perform BFS to find the shortest path from node s to node t
+	unordered_map<int, bool> visited;
+    unordered_map<int, int> parent;
+    queue<int> q;
+
+    q.push(s); // Start BFS from the source node s
+	parent[s] = -1; // The source node has no parent
+    visited[s] = true; // Mark the source node as visited
+
+
+	while(!q.empty()){
+		int front = q.front();
+		q.pop();
+
+		for(auto neighbour: adj[front]){
+			if(!visited[neighbour]){
+				visited[neighbour] = true;
+				parent[neighbour] = front;
+				q.push(neighbour);
+			}
+		}
+	}
+
+	//prepare shortest path
+	vector<int> ans;
+	int currentNode = t;
+	ans.push_back(t);
+
+  //Backtrack from the target node to the source node using the parent map
+	while(currentNode != s){
+		currentNode = parent[currentNode]; //Move to the parent node
+		ans.push_back(currentNode);//Add the parent node to the path
+	}
+
+	//Reverse the path to get it from the source node to the target node
+	reverse(ans.begin(), ans.end());
+	return ans;
+}
