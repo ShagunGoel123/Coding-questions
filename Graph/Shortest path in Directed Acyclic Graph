@@ -1,0 +1,101 @@
+Problem:
+
+Given a Directed Acyclic Graph of N vertices from 0 to N-1 and a 2D Integer array(or vector) edges[ ][ ]
+of length M, where there is a directed edge from edge[i][0] to edge[i][1] with a distance of edge[i][2] for all i.
+Find the shortest path from src(0) vertex to all the vertices and if it is impossible to reach any vertex, 
+then return -1 for that vertex.
+
+Example1:
+Input:
+N = 4, M = 2
+edge = [[0,1,2],[0,2,1]]
+Output:
+0 2 1 -1
+Explanation:
+Shortest path from 0 to 1 is 0->1 with edge weight 2. 
+Shortest path from 0 to 2 is 0->2 with edge weight 1.
+There is no way we can reach 3, so it's -1 for 3.
+
+
+Example2:
+Input:
+N = 6, M = 7
+edge = [[0,1,2],[0,4,1],[4,5,4],[4,2,2],[1,2,3],[2,3,6],[5,3,1]]
+Output:
+0 2 3 6 1 5
+Explanation:
+Shortest path from 0 to 1 is 0->1 with edge weight 2. 
+Shortest path from 0 to 2 is 0->4->2 with edge weight 1+2=3.
+Shortest path from 0 to 3 is 0->4->5->3 with edge weight 1+4+1=6.
+Shortest path from 0 to 4 is 0->4 with edge weight 1.
+Shortest path from 0 to 5 is 0->4->5 with edge weight 1+4=5.
+
+
+
+Solution:
+
+//Time Complexity:O(N+M), where N - num of nodes,  M - num of edges
+//Space Complexity: O(N+M)
+
+class Solution {
+public:
+    // Depth First Search (DFS) to perform topological sort
+    void dfs(int node, unordered_map<int, bool>& vis, stack<int>& s, vector<pair<int, int>> adj[]) {
+        vis[node] = true; // Mark the current node as visited
+        // Visit all the neighbors of the current node
+        for (auto neighbour : adj[node]) {
+            if (!vis[neighbour.first]) {
+                dfs(neighbour.first, vis, s, adj); // Recursively visit unvisited neighbors
+            }
+        }
+        s.push(node); // Push the current node to the stack after visiting all its neighbors
+    }
+
+    // Function to find the shortest path in a DAG
+    vector<int> shortestPath(int N, int M, vector<vector<int>>& edges) {
+        // Create adjacency list for the graph
+        vector<pair<int, int>> adj[N];
+        for (int i = 0; i < M; i++) {
+            int u = edges[i][0]; // Start node of the edge
+            int v = edges[i][1]; // End node of the edge
+            int wt = edges[i][2]; // Weight of the edge
+            adj[u].push_back({v, wt}); // Add the edge to the adjacency list
+        }
+
+        unordered_map<int, bool> visited; // Map to keep track of visited nodes
+        stack<int> s; // Stack to store the topological order of nodes
+        // Perform topological sort for all nodes
+        for (int i = 0; i < N; i++) {
+            if (!visited[i]) {
+                dfs(i, visited, s, adj); // Perform DFS if the node is not visited
+            }
+        }
+
+        vector<int> dist(N, INT_MAX); // Initialize distances to all nodes as infinity
+        dist[0] = 0; // Distance to the source node (assumed to be 0) is 0
+
+        // Process nodes in topological order
+        while (!s.empty()) {
+            int top = s.top();
+            s.pop();
+
+            // Update distances of all adjacent nodes
+            if (dist[top] != INT_MAX) {
+                for (auto& neighbour : adj[top]) {
+                    if (dist[top] + neighbour.second < dist[neighbour.first]) {
+                        dist[neighbour.first] = dist[top] + neighbour.second; // Update the distance
+                    }
+                }
+            }
+        }
+
+        // For unreachable nodes, you can set the distance to -1
+        for (int i = 0; i < N; i++) {
+            if (dist[i] == INT_MAX) {
+                dist[i] = -1;
+            }
+        }
+
+        return dist; // Return the distances array
+    }
+};
