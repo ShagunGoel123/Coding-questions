@@ -1,0 +1,55 @@
+Problem:
+
+Given a string s, find the length of the longest 
+substring without repeating characters.
+
+Example 1:
+Input: s = "abcabcbb"
+Output: 3
+Explanation: The answer is "abc", with the length of 3.
+
+Example 2:
+Input: s = "bbbbb"
+Output: 1
+Explanation: The answer is "b", with the length of 1.
+
+Example 3:
+Input: s = "pwwkew"
+Output: 3
+Explanation: The answer is "wke", with the length of 3.
+Notice that the answer must be a substring, "pwke" is a subsequence and not a substring.
+
+
+
+Solution:
+
+//Time Complexity: O(n)
+//Space Complexity: O(n)
+
+class Solution {
+public:
+    int lengthOfLongestSubstring(string& s) {
+        unordered_set<char> chars; // to store characters in the current window
+        int maxSize = 0;
+        int left = 0, right = 0; // pointers for the sliding window
+        
+        // sliding window approach
+        while (right < s.size()) {
+            // if the current character at s[right] is already in the set
+            while (chars.find(s[right]) != chars.end()) {
+                // remove characters from the set and move the left pointer to the right
+                chars.erase(s[left]);
+                ++left;
+            }
+            
+            // update the maximum length found so far
+            maxSize = max(maxSize, right - left + 1);
+            
+            // add the current character to the set and move the right pointer to the right
+            chars.insert(s[right]);
+            ++right;
+        }
+        
+        return maxSize;
+    }
+};
